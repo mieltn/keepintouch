@@ -10,10 +10,11 @@ func InitRouter(
 ) *gin.Engine {
 	r := gin.Default()
 
-	auth := r.Group("/auth")
-	auth.GET("/register", user.Register)
-	auth.GET("/login", user.Login)
-	auth.GET("/logout", user.Logout)
+	authGr := r.Group("/auth")
+	authGr.POST("/register", user.Register)
+	authGr.POST("/login", user.Login)
+	authGr.POST("/logout", user.Logout)
+	authGr.POST("/refresh", user.Refresh)
 
 	return r
 }
