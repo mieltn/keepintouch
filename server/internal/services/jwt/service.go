@@ -58,6 +58,7 @@ func (s *Service) CreateTokens(user *dto.User) (*dto.UserAuthRes, error) {
 		RefreshToken: refresh,
 		Id: user.Id,
 		Username: user.Username,
+		Email: user.Email,
 	}, nil
 }
 

@@ -29,6 +29,7 @@ type UserAuthRes struct {
 	RefreshToken string `json:"refresh_token"`
 	Id           string `json:"id"`
 	Username     string `json:"username"`
+	Email        string `json:"email"`
 }
 
 type UserRefreshReq struct {
