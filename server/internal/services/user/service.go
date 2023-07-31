@@ -65,6 +65,10 @@ func (s *Service) Refresh(ctx context.Context, in *dto.UserRefreshReq) (*dto.Use
 	return s.JWTService.Refresh(in.RefreshToken)
 }
 
+func (s *Service) Validate(ctx context.Context, token string) (bool, error) {
+	return s.JWTService.Validate(token)
+}
+
 func (s *Service) Logout(ctx context.Context) {}
 
 func hashPassword(password string) (string, error) {

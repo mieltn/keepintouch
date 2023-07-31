@@ -11,6 +11,7 @@ func InitRouter(
 	r := gin.Default()
 
 	authGr := r.Group("/auth")
+	authGr.Use(user.AuthRequired)
 	authGr.POST("/register", user.Register)
 	authGr.POST("/login", user.Login)
 	authGr.POST("/logout", user.Logout)
