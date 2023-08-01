@@ -16,3 +16,6 @@ migrate-up:
 
 migrate-down:
 	goose -dir db/migrations postgres ${POSTGRES_DSN} down
+
+run:
+	go build -o build cmd/*.go && ./build/main
