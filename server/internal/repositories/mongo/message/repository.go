@@ -50,6 +50,7 @@ func (r *Repository) MessageByChatId(ctx context.Context, in *dto.MessageByChatI
 	filter["chat_id"] = oid
 
 	opts := options.Find()
+	opts.SetSort(bson.D{{"created_at", -1}})
 	opts.SetLimit(int64(in.Limit))
 	opts.SetSkip(int64(in.Offset))
 
