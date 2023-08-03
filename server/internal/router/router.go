@@ -21,12 +21,12 @@ func InitRouter(
 	authGr.POST("/refresh", user.Refresh)
 
 	chatGr := r.Group("")
-	// chatGr.Use(user.AuthRequired)
+	chatGr.Use(user.AuthRequired)
 	chatGr.GET("/chats", chat.List)
 	chatGr.POST("/chats", chat.Create)
 
 	messageGr := r.Group("")
-	// messageGr.Use(user.AuthRequired)
+	messageGr.Use(user.AuthRequired)
 	messageGr.GET("/messages/:chatId", message.MessageByChatId)
 	messageGr.POST("/messages", message.Create)
 

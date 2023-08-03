@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -48,13 +49,14 @@ func (h *Handler) Refresh(c *gin.Context) {
 }
 
 func (h *Handler) AuthRequired(c *gin.Context) {
-	tokenParam := c.Request.Header["Token"]
-	if len(tokenParam) == 0 {
+	tokenHeader := c.GetHeader("Authorization")
+	if tokenHeader == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": errNoTokenInHeader.Error()})
 		c.Abort()
 		return
 	}
-	if isValid, err := h.service.Validate(c, tokenParam[0]); !isValid {
+	token := strings.Split(tokenHeader, " ")
+	if isValid, err := h.service.Validate(c, token[len(token)-1]); !isValid {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		c.Abort()
 		return
