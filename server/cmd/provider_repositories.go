@@ -3,6 +3,7 @@ package main
 import (
 	repoUser "github.com/mieltn/keepintouch/internal/repositories/mongo/user"
 	repoChat "github.com/mieltn/keepintouch/internal/repositories/mongo/chat"
+	repoMessage "github.com/mieltn/keepintouch/internal/repositories/mongo/message"
 )
 
 func (sp *serviceProvider) GetUserRepository() *repoUser.Repository {
@@ -21,4 +22,13 @@ func (sp *serviceProvider) GetChatRepository() *repoChat.Repository {
 		)
 	}
 	return sp.repoChat
+}
+
+func (sp *serviceProvider) GetMessageRepository() *repoMessage.Repository {
+	if sp.repoMessage == nil {
+		sp.repoMessage = repoMessage.NewRepository(
+			sp.GetDB(),
+		)
+	}
+	return sp.repoMessage
 }

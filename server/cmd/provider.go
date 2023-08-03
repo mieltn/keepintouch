@@ -7,8 +7,10 @@ import (
 	"github.com/mieltn/keepintouch/internal/config"
 	hndlUser "github.com/mieltn/keepintouch/internal/handlers/user"
 	hndlChat "github.com/mieltn/keepintouch/internal/handlers/chat"
+	hndlMessage "github.com/mieltn/keepintouch/internal/handlers/message"
 	repoChat "github.com/mieltn/keepintouch/internal/repositories/mongo/chat"
 	repoUser "github.com/mieltn/keepintouch/internal/repositories/mongo/user"
+	repoMessage "github.com/mieltn/keepintouch/internal/repositories/mongo/message"
 	srvChat "github.com/mieltn/keepintouch/internal/services/chat"
 	srvJWT "github.com/mieltn/keepintouch/internal/services/jwt"
 	srvUser "github.com/mieltn/keepintouch/internal/services/user"
@@ -24,11 +26,13 @@ type serviceProvider struct {
 	db       *mongo.Client
 	repoUser *repoUser.Repository
 	repoChat *repoChat.Repository
+	repoMessage *repoMessage.Repository
 	srvUser  *srvUser.Service
 	srvChat  *srvChat.Service
 	srvJWT   *srvJWT.Service
 	hndlUser *hndlUser.Handler
 	hndlChat *hndlChat.Handler
+	hndlMessage *hndlMessage.Handler
 }
 
 func (sp *serviceProvider) Close() {

@@ -4,11 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mieltn/keepintouch/internal/handlers/user"
 	"github.com/mieltn/keepintouch/internal/handlers/chat"
+	"github.com/mieltn/keepintouch/internal/handlers/message"
 )
 
 func InitRouter(
 	user *user.Handler,
 	chat *chat.Handler,
+	message *message.Handler,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -22,6 +24,11 @@ func InitRouter(
 	// chatGr.Use(user.AuthRequired)
 	chatGr.GET("/chats", chat.List)
 	chatGr.POST("/chats", chat.Create)
+
+	messageGr := r.Group("")
+	// messageGr.Use(user.AuthRequired)
+	messageGr.GET("/messages/:chatId", message.MessageByChatId)
+	messageGr.POST("/messages", message.Create)
 
 	return r
 }
