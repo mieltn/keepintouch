@@ -6,7 +6,10 @@ import (
 
 	"github.com/mieltn/keepintouch/internal/config"
 	hndlUser "github.com/mieltn/keepintouch/internal/handlers/user"
+	hndlChat "github.com/mieltn/keepintouch/internal/handlers/chat"
+	repoChat "github.com/mieltn/keepintouch/internal/repositories/mongo/chat"
 	repoUser "github.com/mieltn/keepintouch/internal/repositories/mongo/user"
+	srvChat "github.com/mieltn/keepintouch/internal/services/chat"
 	srvJWT "github.com/mieltn/keepintouch/internal/services/jwt"
 	srvUser "github.com/mieltn/keepintouch/internal/services/user"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -20,9 +23,12 @@ type serviceProvider struct {
 	closeFn  []OnCloseApp
 	db       *mongo.Client
 	repoUser *repoUser.Repository
+	repoChat *repoChat.Repository
 	srvUser  *srvUser.Service
-	hndlUser *hndlUser.Handler
+	srvChat  *srvChat.Service
 	srvJWT   *srvJWT.Service
+	hndlUser *hndlUser.Handler
+	hndlChat *hndlChat.Handler
 }
 
 func (sp *serviceProvider) Close() {

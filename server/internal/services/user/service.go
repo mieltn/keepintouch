@@ -2,13 +2,10 @@ package user
 
 import (
 	"context"
-	"errors"
 
 	"github.com/mieltn/keepintouch/internal/dto"
-	"golang.org/x/crypto/bcrypt"
+	pswd "github.com/mieltn/keepintouch/internal/services/password"
 )
-
-var errIncorrectPassword = errors.New("Incorrect password")
 
 type UserRepository interface {
 	GetUserByEmail(context.Context, string) (*dto.User, error)
@@ -34,7 +31,7 @@ func NewService(repo UserRepository, JWTService JWTService) *Service {
 }
 
 func (s *Service) Register(ctx context.Context, in *dto.UserCreateReq) (*dto.UserCreateRes, error) {
-	hash, err := hashPassword(in.Password)
+	hash, err := pswd.HashPassword(in.Password)
 	if err != nil {
 		return nil, err
 	}
@@ -55,8 +52,8 @@ func (s *Service) Login(ctx context.Context, in *dto.UserLoginReq) (*dto.UserAut
 	if err != nil {
 		return nil, err
 	}
-	if !checkPasswordHash(in.Password, user.Password) {
-		return nil, errIncorrectPassword
+	if !pswd.CheckPasswordHash(in.Password, user.Password) {
+		return nil, pswd.ErrIncorrectPassword
 	}
 	return s.JWTService.CreateTokens(user)
 }
@@ -70,13 +67,3 @@ func (s *Service) Validate(ctx context.Context, token string) (bool, error) {
 }
 
 func (s *Service) Logout(ctx context.Context) {}
-
-func hashPassword(password string) (string, error) {
-    bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-    return string(bytes), err
-}
-
-func checkPasswordHash(password, hash string) bool {
-    err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-    return err == nil
-}

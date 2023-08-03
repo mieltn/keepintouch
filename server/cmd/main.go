@@ -21,6 +21,6 @@ func main() {
 	sp := NewServiceProvider(ctx, cfg)
 	defer sp.Close()
 
-	r := router.InitRouter(sp.GetUserHandler())
+	r := router.InitRouter(sp.GetUserHandler(), sp.GetChatHandler())
 	r.Run()
 }

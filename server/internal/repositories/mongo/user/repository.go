@@ -55,9 +55,8 @@ func (r *Repository) Create(ctx context.Context, in *dto.UserCreateReq) (*dto.Us
 	if err != nil {
 		return nil, err
 	}
-	id := res.InsertedID.(primitive.ObjectID).Hex()
 	return &dto.User{
-		Id:       id,
+		Id:       res.InsertedID.(primitive.ObjectID).Hex(),
 		Username: in.Username,
 		Email:    in.Email,
 	}, nil
