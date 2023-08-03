@@ -2,9 +2,9 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mieltn/keepintouch/internal/handlers/user"
 	"github.com/mieltn/keepintouch/internal/handlers/chat"
 	"github.com/mieltn/keepintouch/internal/handlers/message"
+	"github.com/mieltn/keepintouch/internal/handlers/user"
 )
 
 func InitRouter(
