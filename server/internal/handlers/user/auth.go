@@ -1,18 +1,14 @@
 package user
 
 import (
-	"context"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mieltn/keepintouch/internal/dto"
 )
 
 func (h *Handler) Login(c *gin.Context) {
-	ctx, cancel := context.WithTimeout(c, time.Second * 10)
-	defer cancel()
 
 	var req dto.UserLoginReq
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -20,7 +16,7 @@ func (h *Handler) Login(c *gin.Context) {
 		return
 	}
 
-	tokens, err := h.service.Login(ctx, &req)
+	tokens, err := h.service.Login(c, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -30,8 +26,6 @@ func (h *Handler) Login(c *gin.Context) {
 }
 
 func (h *Handler) Refresh(c *gin.Context) {
-	ctx, cancel := context.WithTimeout(c, time.Second * 10)
-	defer cancel()
 
 	var req dto.UserRefreshReq
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -39,7 +33,7 @@ func (h *Handler) Refresh(c *gin.Context) {
 		return
 	}
 
-	tokens, err := h.service.Refresh(ctx, &req)
+	tokens, err := h.service.Refresh(c, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

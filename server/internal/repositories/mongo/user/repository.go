@@ -26,6 +26,27 @@ func NewRepository(client *mongo.Client) *Repository {
 	}
 }
 
+func (r *Repository) GetUserById(ctx context.Context, id string) (*dto.User, error) {
+	collection := r.client.Database("keepintouch").Collection("users")
+
+	oid, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	var dbItem dbUser
+	if err := collection.FindOne(ctx, bson.M{"_id": oid}).Decode(&dbItem); err != nil {
+		return nil, err
+	}
+
+	return &dto.User{
+		Id: dbItem.Id.Hex(),
+		Username: dbItem.Username,
+		Email: dbItem.Email,
+		Password: dbItem.Password,
+	}, nil
+}
+
 func (r *Repository) GetUserByEmail(ctx context.Context, email string) (*dto.User, error) {
 	collection := r.client.Database("keepintouch").Collection("users")
 

@@ -1,9 +1,10 @@
 package main
 
 import (
+	srvBroadcaster "github.com/mieltn/keepintouch/internal/services/broadcaster"
+	srvChat "github.com/mieltn/keepintouch/internal/services/chat"
 	srvJWT "github.com/mieltn/keepintouch/internal/services/jwt"
 	srvUser "github.com/mieltn/keepintouch/internal/services/user"
-	srvChat "github.com/mieltn/keepintouch/internal/services/chat"
 )
 
 func (sp *serviceProvider) GetJWTService() *srvJWT.Service {
@@ -32,4 +33,12 @@ func (sp *serviceProvider) GetChatService() *srvChat.Service {
 		)
 	}
 	return sp.srvChat
+}
+
+func (sp *serviceProvider) GetBroadcasterService() *srvBroadcaster.Service {
+	if sp.srvBroadcaster == nil {
+		sp.srvBroadcaster = srvBroadcaster.NewService()
+		sp.onClose(sp.srvBroadcaster.Close)
+	}
+	return sp.srvBroadcaster
 }

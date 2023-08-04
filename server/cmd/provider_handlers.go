@@ -1,9 +1,10 @@
 package main
 
 import (
-	hndlUser "github.com/mieltn/keepintouch/internal/handlers/user"
 	hndlChat "github.com/mieltn/keepintouch/internal/handlers/chat"
 	hndlMessage "github.com/mieltn/keepintouch/internal/handlers/message"
+	hndlUser "github.com/mieltn/keepintouch/internal/handlers/user"
+	hndlWs "github.com/mieltn/keepintouch/internal/handlers/ws"
 )
 
 func (sp *serviceProvider) GetUserHandler() *hndlUser.Handler {
@@ -31,4 +32,15 @@ func (sp *serviceProvider) GetMessageHandler() *hndlMessage.Handler {
 		)
 	}
 	return sp.hndlMessage
+}
+
+func (sp *serviceProvider) GetWsHandler() *hndlWs.Handler {
+	if sp.hndlWs == nil {
+		sp.hndlWs = hndlWs.NewHandler(
+			sp.GetUserRepository(),
+			sp.GetMessageRepository(),
+			sp.GetBroadcasterService(),
+		)
+	}
+	return sp.hndlWs
 }

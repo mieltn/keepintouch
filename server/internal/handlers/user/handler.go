@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mieltn/keepintouch/internal/dto"
@@ -33,8 +32,6 @@ func NewHandler(service UserService) *Handler {
 }
 
 func (h *Handler) Register(c *gin.Context) {
-	ctx, cancel := context.WithTimeout(c, time.Second * 10)
-	defer cancel()
 
 	var req dto.UserCreateReq
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -42,7 +39,7 @@ func (h *Handler) Register(c *gin.Context) {
 		return
 	}
 
-	user, err := h.service.Register(ctx, &req)
+	user, err := h.service.Register(c, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}

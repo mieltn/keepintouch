@@ -3,10 +3,8 @@ package message
 import (
 	"context"
 	"errors"
-	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mieltn/keepintouch/internal/dto"
@@ -32,14 +30,11 @@ func NewHandler(repo MessageRepository) *Handler {
 }
 
 func (h *Handler) MessageByChatId(c *gin.Context) () {
-	ctx, cancel := context.WithTimeout(c, time.Second * 10)
-	defer cancel()
 
 	var req dto.MessageByChatIdReq
 	params := c.Request.URL.Query()
 	
 	req.Id = c.Param("chatId")
-	log.Println(req.Id)
 	
 	if limit, ok := params["limit"]; !ok {
 		req.Limit = 25
@@ -63,7 +58,7 @@ func (h *Handler) MessageByChatId(c *gin.Context) () {
 		req.Offset = offsetInt
 	}
 
-	messages, err := h.repo.MessageByChatId(ctx, &req)
+	messages, err := h.repo.MessageByChatId(c, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -73,8 +68,6 @@ func (h *Handler) MessageByChatId(c *gin.Context) () {
 }
 
 func (h *Handler) Create(c *gin.Context) {
-	ctx, cancel := context.WithTimeout(c, time.Second * 10)
-	defer cancel()
 
 	var req dto.MessageCreateReq
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -82,7 +75,7 @@ func (h *Handler) Create(c *gin.Context) {
 		return
 	}
 
-	chat, err := h.repo.Create(ctx, &req)
+	chat, err := h.repo.Create(c, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

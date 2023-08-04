@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mieltn/keepintouch/internal/dto"
@@ -26,8 +25,6 @@ func NewHandler(service ChatService) *Handler {
 }
 
 func (h *Handler) List(c *gin.Context) () {
-	ctx, cancel := context.WithTimeout(c, time.Second * 10)
-	defer cancel()
 
 	var req dto.ChatListReq
 	params := c.Request.URL.Query()
@@ -60,7 +57,7 @@ func (h *Handler) List(c *gin.Context) () {
 		req.Offset = offsetInt
 	}
 
-	chats, err := h.service.List(ctx, &req)
+	chats, err := h.service.List(c, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -70,8 +67,6 @@ func (h *Handler) List(c *gin.Context) () {
 }
 
 func (h *Handler) Create(c *gin.Context) {
-	ctx, cancel := context.WithTimeout(c, time.Second * 10)
-	defer cancel()
 
 	var req dto.ChatCreateReq
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -79,7 +74,7 @@ func (h *Handler) Create(c *gin.Context) {
 		return
 	}
 
-	chat, err := h.service.Create(ctx, &req)
+	chat, err := h.service.Create(c, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
