@@ -51,8 +51,8 @@ var upgrader = websocket.Upgrader{
 func (h *Handler) JoinChat(c *gin.Context) {
 
 	var req dto.JoinChatReq
-	req.ChatId = c.Param("chatId")
-	req.UserId = c.Param("userId")
+	req.ChatId = c.Query("chatId")
+	req.UserId = c.Query("userId")
 
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
