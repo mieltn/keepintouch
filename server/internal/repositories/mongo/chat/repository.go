@@ -30,7 +30,6 @@ func (m dbChat) ToDTO() *dto.Chat {
 	return &dto.Chat{
 		Id:       m.Id.Hex(),
 		Name:     m.Name,
-		Password: m.Password,
 	}
 }
 
@@ -86,6 +85,5 @@ func (r *Repository) Create(ctx context.Context, in *dto.ChatCreateReq) (*dto.Ch
 	return &dto.Chat{
 		Id:       res.InsertedID.(primitive.ObjectID).Hex(),
 		Name:     in.Name,
-		Password: in.Password,
 	}, nil
 }

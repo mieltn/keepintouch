@@ -26,10 +26,8 @@ func (s *Service) Run() {
 	for {
 		select {
 		case cl := <-s.register:
-			if _, ok := s.activeConnections[cl.ChatId]; ok {
-				if !s.hasConnection(cl) {
-					s.activeConnections[cl.ChatId] = append(s.activeConnections[cl.ChatId], cl)
-				}
+			if !s.hasConnection(cl) {
+				s.activeConnections[cl.ChatId] = append(s.activeConnections[cl.ChatId], cl)
 			}
 
 		case cl := <-s.unregister:
