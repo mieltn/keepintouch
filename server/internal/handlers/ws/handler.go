@@ -91,6 +91,11 @@ func (h *Handler) JoinChat(c *gin.Context) {
 }
 
 func (h *Handler) receive(ctx context.Context, client *dto.Client) error {
+	defer func() {
+		h.broadcasterSrv.GetUnregister() <- client
+		client.Conn.Close()
+	}()
+
 	for {
 		_, p, err := client.Conn.ReadMessage()
 		if err != nil {
